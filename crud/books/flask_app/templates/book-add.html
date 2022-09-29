@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="/authors"><h2><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+                <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"/>
+                </svg>Home</h2></a>
+        </nav>
+        <div class="container row align-items-center">
+            <div class="container col bg-secondary m-3">
+                <h2 class="text-danger m-2">New Book</h2>
+                <form action="/add-book" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Name: </label>
+                        <input type="text" class="form-control" name="title">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"># of pages </label>
+                        <input type="text" class="form-control" name="num_of_pages">
+                    </div>
+                    <button class="btn btn-danger m-2" type="submit">Add Book</button>
+                </form>
+            </div>
+            <div class="container bg-secondary col m-3">
+                <h2 class="text-danger m-2">All Books</h2>
+                <ul class="list-group m-2">
+                    {% for book in books %}
+                        <a href="/books/{{book.id}}" class="list-group-item list-group-item-action list-group-item-danger">{{book.title}}</a>
+                    {% endfor %}
+                </ul>
+                <button class="btn btn-danger m-2" onclick="window.location.href='/authors'">Add an Author</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
