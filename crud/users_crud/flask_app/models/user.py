@@ -1,4 +1,8 @@
 from flask_app.config.mysqlconnection import connectToMySQL
+from flask import flash
+import re
+
+EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 
 class User:
     DB = "users"
@@ -45,3 +49,32 @@ class User:
         query = "UPDATE users SET first_name=%(first_name)s,last_name=%(last_name)s, email=%(email)s WHERE id=%(id)s"
         results = connectToMySQL(cls.DB).query_db(query, data)
         return results
+
+    @classmethod
+    def check_unique_email(cls, user_data):
+        data = {
+            "email":user_data['email']
+        }
+        query = "SELECT * FROM users WHERE email = %(email)s;"
+        result = connectToMySQL(cls.DB).query_db(query, data)
+        print(result)
+        if len(result) == 0:
+            return False
+        else:
+            flash("Email already in use", 'email')
+            return cls(result[0])
+            
+
+    @staticmethod
+    def validate_user(user):
+        is_valid = True
+        if not str.isalpha(user['first_name']):
+            flash("First Name cannot be blank, may only contain letters", 'first')
+            is_valid = False
+        if not str.isalpha(user['last_name']):
+            flash("Last Name cannot be blank, may only contain letters", 'last')
+            is_valid = False
+        if not EMAIL_REGEX.match(user['email']):
+            flash("Invalid Email Address", 'email')
+            is_valid = False
+        return is_valid

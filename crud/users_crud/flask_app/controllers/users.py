@@ -13,8 +13,15 @@ def create_user():
 
 @app.route("/add-user", methods=["POST"])
 def add_product():
-    print(request.form)
+    session['first_name'] = request.form['first_name']
+    session['last_name'] = request.form['last_name']
+    session['email'] = request.form['email']
+    if not user.User.validate_user(request.form):
+        return redirect("/create-user")
+    if user.User.check_unique_email(request.form):
+        return redirect("create-user")
     user.User.create_user(request.form)
+    session.clear()
     return redirect("/")
 
 @app.route('/get-user/<id>')
