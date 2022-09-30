@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container bg-secondary">
+        <nav class="container d-flex justify-content-between">
+            <h1 class="text-light">Log a New Order</h1>
+            <a href="/cookies" class="text-light"><h2><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+                <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"/>
+                </svg>Home</h2></a>
+        </nav>
+        <div class="container row">
+            <div class="col">
+                <form action="/cookies/place-order" method="post">
+                    <div class="form-group m-2">
+                        <label class="form-label">Name:</label>
+                        <input class="form-control" type="text" name="name" value="{{session.name}}">
+                    </div>
+                    <div class="form-group m-2">
+                        <label class="form-label">Cookie Type:</label>
+                        <input class="form-control" type="text" name="cookie" value="{{session.cookie}}">
+                    </div>
+                    <div class="form-group m-2">
+                        <label class="form-label">Number of Boxes:</label>
+                        <input class="form-control" type="number" name="boxes" value="{{session.boxes}}">
+                    </div>
+                    <button class="btn btn-primary m-2">Log Order</button>
+                </form>
+            </div>
+            <div class="col">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                        <h3 class="text-danger">{{message}}</h3>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
