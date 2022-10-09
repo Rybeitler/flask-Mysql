@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav>
+        <div class="container">
+            <div class="row gx-5">
+                <div class="col bg-dark d-flex justify-content-between">
+                    <h1 class="text-primary m-2">Welcome {{logged_in_user.first_name}}</h1>
+                    <div>
+                        <button class="btn btn-success m-2" onclick="window.location.href='/rides/new'">+Request a
+                            Ride+</button>
+                        <button class="btn btn-primary m-2" onclick="window.location.href='/logout'">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container bg-dark gx-3">
+        <div class="row">
+            <div class="col p-2 m-2">
+                {% for ride in rides %}
+                {% if ride.creator.id == logged_in_user.id %}
+                <div class="row bg-light m-2">
+                    <div class="col bg-warning bg-opacity-25">
+                        <p class="fw-bold">Rider:</p>
+                        <p class="fw-bold">Destination:</p>
+                        <p class="fw-bold">When needed:</p>
+                    </div>
+                    <div class="col bg-warning bg-opacity-25">
+                        <P>{{ride.creator.first_name}}</P>
+                        <P>{{ride.destination}}</P>
+                        <p>{{ride.date.strftime('%b %e')}}</p>
+                    </div>
+                    <div class="bg-warning bg-opacity-25">
+                        <button class="btn btn-danger m-2" onclick="window.location.href='/rides/delete/{{ride.id}}'">Delete</button>
+                    </div>
+                </div>
+                {% else %}
+                <div class="row  bg-light m-2">
+                    <div class="col">
+                        <p class="fw-bold">Rider:</p>
+                        <p class="fw-bold">Destination:</p>
+                        <p class="fw-bold">When needed:</p>
+                    </div>
+                    <div class="col">
+                        <P>{{ride.creator.first_name}}</P>
+                        <P>{{ride.destination}}</P>
+                        <p>{{ride.date.strftime('%b %e')}}</p>
+                    </div>
+                    <div>
+                        <form action="/rides/drive" method="post">
+                            <input type="hidden" name="ride_id" value="{{ride.id}}">
+                            <input type="hidden" name="driver_id" value="{{logged_in_user.id}}">
+                            <button type="submit" class="btn btn-info m-2">I can drive</button>
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <div class="col p-2 m-2">
+                {% for ride in rides_w_driver %}
+                {% if ride.creator.id == logged_in_user.id %}
+                <div class="row bg-light m-2">
+                    <div class="bg-warning bg-opacity-25">
+                    <p class="fs-3">{{ride.driver.first_name}} is driving {{ride.creator.first_name}} to
+                        {{ride.destination}} on {{ride.date.strftime('%b %e')}}</p>
+                        <button class="btn btn-info m-2" onclick="window.location.href='/rides/{{ride.id}}'">Details</button>
+                    </div>
+                </div>
+                {% elif ride.driver.id == logged_in_user.id %}
+                <div class="row bg-light m-2">
+                    <div class="bg-warning bg-opacity-25">
+                    <p class="fs-3">{{ride.driver.first_name}} is driving {{ride.creator.first_name}} to
+                        {{ride.destination}} on {{ride.date.strftime('%b %e')}}</p>
+                        <button class="btn btn-danger m-2" onclick="window.location.href='/rides/cancel/{{ride.id}}'">Cancel</button>
+                        <button class="btn btn-info m-2" onclick="window.location.href='/rides/{{ride.id}}'">Details</button>
+                    </div>
+                </div>
+                {% else %}
+                <div class="row m-2 bg-light">
+                        <p class="fs-3">{{ride.driver.first_name}} is driving {{ride.creator.first_name}} to
+                            {{ride.destination}} on {{ride.date.strftime('%b %e')}}</p>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
